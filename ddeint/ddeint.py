@@ -141,5 +141,8 @@ def ddeint(func, g, tt, fargs=None):
     dde_ = dde(func)
     dde_.set_initial_value(ddeVar(g, tt[0]))
     dde_.set_f_params(fargs if fargs else [])
-    results = [dde_.integrate(dde_.t + dt) for dt in np.diff(tt)]
-    return np.array([g(tt[0])] + results)
+    #Correct array orientation to match modern syntax and inserts initial value at beginning
+    results = np.array([results[i][0] for i in range(len(results))])
+    results = np.insert(results, 0, g(tt[0]))
+    
+    return results
